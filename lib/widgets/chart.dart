@@ -1,8 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, prefer_const_constructors, unused_local_variable, prefer_const_literals_to_create_immutables
-import 'package:expenses/widgets/charts_bar.dart';
 import 'package:flutter/material.dart';
-import '../models/transaction.dart';
+import 'package:expenses/models/transaction.dart';
 import 'package:intl/intl.dart';
+import 'package:expenses/widgets/chart_bar.dart';
 
 class Chart extends StatelessWidget {
   final List<Transaction> recentTransactions;
@@ -51,14 +51,13 @@ class Chart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: groupedTransactionValues.map((data) {
             return Flexible(
-              fit: FlexFit.tight,
-              child: ChartBar(
-                  data['day'],
-                  data['amount'],
-                  totalSpending == 0.0
-                      ? 0.0
-                      : (data['amount'] as double) / totalSpending),
-            );
+                fit: FlexFit.tight,
+                child: ChartBar(
+                    data['day'],
+                    data['amount'],
+                    totalSpending == 0.0
+                        ? 0.0
+                        : (data['amount'] as double) / totalSpending));
           }).toList(),
         ),
       ),
