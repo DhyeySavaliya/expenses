@@ -1,38 +1,37 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, sized_box_for_whitespace, prefer_const_constructors, missing_return
+// ignore_for_file: sized_box_for_whitespace, use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 
 class ChartBar extends StatelessWidget {
-  final String label;
+  final String lebel;
   final double spendingAmount;
   final double spendingPctOfTotal;
 
-  ChartBar(this.label, this.spendingAmount, this.spendingPctOfTotal);
+  const ChartBar({this.lebel, this.spendingAmount, this.spendingPctOfTotal});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (ctx, constraints) {
         return Column(
-          children: <Widget>[
+          children: [
             Container(
-              height: constraints.maxHeight * 0.15,
-              child: FittedBox(
-                child: Text('\$${spendingAmount.toStringAsFixed(0)}'),
-              ),
-            ),
+                height: constraints.maxHeight * .15,
+                child: FittedBox(
+                    child: Text('\$${spendingAmount.toStringAsFixed(0)}'))),
             SizedBox(
-              height: constraints.maxHeight * 0.05,
+              height: constraints.maxHeight * .05,
             ),
             Container(
-              height: constraints.maxHeight * 0.6,
+              height: constraints.maxHeight * .6,
               width: 10,
               child: Stack(
-                children: <Widget>[
+                children: [
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey, width: 1.0),
-                      color: Color.fromRGBO(220, 220, 220, 1),
-                      borderRadius: BorderRadius.circular(10),
+                      color: const Color.fromRGBO(220, 220, 220, 1),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   FractionallySizedBox(
@@ -40,20 +39,20 @@ class ChartBar extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
             SizedBox(
-              height: constraints.maxHeight * 0.05,
+              height: constraints.maxHeight * .05,
             ),
             Container(
-              height: constraints.maxHeight * 0.15,
+              height: constraints.maxHeight * .15,
               child: FittedBox(
-                child: Text(label),
+                child: Text(lebel),
               ),
             ),
           ],

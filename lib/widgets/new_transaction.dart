@@ -1,42 +1,35 @@
-// ignore_for_file: deprecated_member_use, prefer_const_constructors, avoid_print, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, sized_box_for_whitespace
+// ignore_for_file: deprecated_member_use, sized_box_for_whitespace, must_be_immutable, non_constant_identifier_names
 
-import 'package:expenses/widgets/adaptive_flat_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../widgets/adaptive_flat_button.dart';
+import 'adaptive_flat_button.dart';
 
 class NewTransaction extends StatefulWidget {
-  final Function addTx;
-
-  NewTransaction(this.addTx);
+  Function userCallBackFunction;
+  NewTransaction(this.userCallBackFunction, {Key key}) : super(key: key);
 
   @override
-  _NewTransactionState createState() => _NewTransactionState();
+  State<NewTransaction> createState() => _NewTransactionState();
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final _titleController = TextEditingController();
-  final _amountController = TextEditingController();
-  DateTime _selectedDate;
+  final titleController = TextEditingController();
+  final amountController = TextEditingController();
+  DateTime selectDate;
 
-  void _submitData() {
-    if (_amountController.text.isEmpty) {
-      return;
-    }
-    final enteredTitle = _titleController.text;
-    final enteredAmount = double.parse(_amountController.text);
+  void _SubmitData() {
+    final enteredTitle = titleController.text;
+    final enteredAmount = double.parse(amountController.text);
+    DateTime enteredDate = selectDate;
+    if (amountController.text.isEmpty ||
+        enteredTitle.isEmpty ||
+        enteredDate == null) return;
 
-    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
-      return;
-    }
-
-    widget.addTx(
+    widget.userCallBackFunction(
       enteredTitle,
       enteredAmount,
-      _selectedDate,
+      enteredDate,
     );
-
     Navigator.of(context).pop();
   }
 
@@ -44,17 +37,16 @@ class _NewTransactionState extends State<NewTransaction> {
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2022),
+      firstDate: DateTime(2019),
       lastDate: DateTime.now(),
     ).then((pickedDate) {
       if (pickedDate == null) {
         return;
       }
       setState(() {
-        _selectedDate = pickedDate;
+        selectDate = pickedDate;
       });
     });
-    print('...');
   }
 
   @override
@@ -64,51 +56,45 @@ class _NewTransactionState extends State<NewTransaction> {
         elevation: 5,
         child: Container(
           padding: EdgeInsets.only(
-            top: 10,
-            left: 10,
-            right: 10,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
-          ),
+              top: 10,
+              left: 10,
+              right: 10,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              CupertinoTextField(),
+            children: [
               TextField(
-                decoration: InputDecoration(labelText: 'Title'),
-                controller: _titleController,
-                onSubmitted: (_) => _submitData(),
-                // onChanged: (val) {
-                //   titleInput = val;
-                // },
+                decoration: const InputDecoration(labelText: 'Title'),
+                controller: titleController,
+                onSubmitted: (_) => _SubmitData(),
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Amount'),
-                controller: _amountController,
+                decoration: const InputDecoration(labelText: 'Amount'),
+                controller: amountController,
                 keyboardType: TextInputType.number,
-                onSubmitted: (_) => _submitData(),
-                // onChanged: (val) => amountInput = val,
+                onSubmitted: (_) => _SubmitData(),
               ),
               Container(
                 height: 70,
                 child: Row(
-                  children: <Widget>[
+                  children: [
                     Expanded(
                       child: Text(
-                        _selectedDate == null
+                        selectDate == null
                             ? 'No Date Chosen!'
-                            : 'Picked Date: ${DateFormat.yMd().format(_selectedDate)}',
+                            : 'Picked Date: ${DateFormat.yMEd().format(selectDate)}',
                       ),
                     ),
-                    AdaptiveFlatButton(_presentDatePicker, 'Choose Date'),
+                    AdaptiveFlatButton('Choose Date', _presentDatePicker),
                   ],
                 ),
               ),
               RaisedButton(
-                child: Text('Add Transaction'),
-                color: Theme.of(context).primaryColor,
+                onPressed: _SubmitData,
+                child: const Text('Add Transaction'),
                 textColor: Theme.of(context).textTheme.button.color,
-                onPressed: _submitData,
-              ),
+                color: Theme.of(context).primaryColor,
+              )
             ],
           ),
         ),
